@@ -1,0 +1,21 @@
+{
+  "name": "tivins/orm",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "shop"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Tivins\\": "src/Tivins"
+    }
+  },
+  "require": {
+    "php": "8.2.*",
+    "tivins/database": "dev-main",
+    "ext-json": "*"
+  }
+}
