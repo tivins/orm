@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0495a3d0d59f0cc399aea93112465a87",
+    "content-hash": "0bd7174f20cb774a280e3281624caf17",
     "packages": [
         {
             "name": "tivins/database",
-            "version": "dev-main",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tivins/database.git",
-                "reference": "91b8a59d7849631e2694131cada4ed928af96449"
+                "reference": "8acddc6e1c48703a8a834e1ef5940bf9f038bd8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tivins/database/zipball/91b8a59d7849631e2694131cada4ed928af96449",
-                "reference": "91b8a59d7849631e2694131cada4ed928af96449",
+                "url": "https://api.github.com/repos/tivins/database/zipball/8acddc6e1c48703a8a834e1ef5940bf9f038bd8a",
+                "reference": "8acddc6e1c48703a8a834e1ef5940bf9f038bd8a",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,6 @@
                 "php-coveralls/php-coveralls": "^2.5",
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -47,25 +46,21 @@
             "description": "A fluent, lightweight, and efficient PDO wrapper.",
             "keywords": [
                 "database",
-                "fluent",
-                "mysql",
                 "pdo",
-                "php",
-                "query",
-                "sqlite"
+                "php"
             ],
             "support": {
                 "issues": "https://github.com/tivins/database/issues",
-                "source": "https://github.com/tivins/database/tree/main"
+                "source": "https://github.com/tivins/database/tree/v1.0.0"
             },
-            "time": "2023-02-25T17:36:11+00:00"
+            "time": "2023-01-18T11:44:48+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "tivins/database": 20
+        "tivins/database": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
