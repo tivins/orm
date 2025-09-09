@@ -1,11 +1,11 @@
 {
   "name": "tivins/orm",
-  "description": "description",
+  "description": "basic php orm",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
-      "name": "shop"
+      "name": "Tivins"
     }
   ],
   "autoload": {
@@ -15,7 +15,7 @@
   },
   "require": {
     "php": ">=8.2",
-    "tivins/database": "dev-main",
+    "tivins/database": "@stable",
     "ext-json": "*"
   }
 }
