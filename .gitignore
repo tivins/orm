@@ -1,2 +1,3 @@
 vendor/
 .idea/
+/tests/Tivins/ORM/_test_db.sqlite

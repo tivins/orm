@@ -3,7 +3,9 @@
 namespace Tivins\ORM;
 
 use JsonSerializable;
+use ReflectionClass;
 use Tivins\Database\SelectQuery;
+use function PHPUnit\Framework\stringStartsWith;
 
 abstract class Model implements JsonSerializable
 {
@@ -26,29 +28,72 @@ abstract class Model implements JsonSerializable
         return self::$cache[static::class][$id];
     }
 
+    public function __construct()
+    {
+        $this->initialize();
+    }
 
-    protected string $table = '';
-    protected string $primaryKey = '';
 
-    abstract public function getFields(): array;
+    private static string $table;
+    private static string $primaryKey;
+    private static array $fields;
+
+    public function getFields(): array
+    {
+        return static::$fields;
+    }
+
+    private function initialize(): void
+    {
+        if (isset(static::$table)) {
+            return;
+        }
+        $refClass = new ReflectionClass(static::class);
+        $tableAttr = $refClass->getAttributes(Table::class)[0] ?? null;
+        static::$table = $tableAttr->newInstance()->name;
+        $refFields = $refClass->getProperties();
+        foreach ($refFields as $field) {
+            $columnAttr = $field->getAttributes(Column::class)[0] ?? null;
+            if ($columnAttr) {
+                /** @var Column $inst */
+                $inst = $columnAttr->newInstance();
+                if ($inst->primary) static::$primaryKey = $field->name;
+                else {
+                    static::$fields[] = $field->name;
+                }
+            }
+        }
+    }
 
     public function load(int $id): static
     {
-        $dbObj = DB::$db->select($this->table, 't')
+        $dbObj = DB::$db->select(self::$table, 't')
             ->addFields('t')
-            ->condition('t.' . $this->primaryKey, $id)
+            ->condition('t.' . self::$primaryKey, $id)
             ->execute()
             ->fetch();
         if ($dbObj) {
             $this->assign((array)$dbObj);
-            $this->{$this->primaryKey} = $dbObj->{$this->primaryKey} ?? 0;
+            $this->{self::$primaryKey} = $dbObj->{self::$primaryKey} ?? 0;
         }
         return $this;
     }
 
+
+    public static function __callStatic(string $name, array $arguments)
+    {
+        if (stringStartsWith($name, 'loadBy')) {
+            $property = lcfirst(substr($name, strlen(('loadBy'))));
+            if (property_exists(static::class, $property)) {
+                return (new static())->loadBy([$property => $arguments[0]]);
+            }
+        }
+        return NULL;
+    }
+
     public function loadBy(array $conditions): static
     {
-        $query = DB::$db->select($this->table, 't')
+        $query = DB::$db->select(self::$table, 't')
             ->addFields('t');
         foreach ($conditions as $field => $value) {
             $query->condition($field, $value);
@@ -56,23 +101,23 @@ abstract class Model implements JsonSerializable
         $dbObj = $query->execute()->fetch();
         if ($dbObj) {
             $this->assign((array)$dbObj);
-            if (!$this->primaryKey)
-                $this->{$this->primaryKey} = $dbObj->{$this->primaryKey} ?? 0;
+            if (!self::$primaryKey)
+                $this->{self::$primaryKey} = $dbObj->{self::$primaryKey} ?? 0;
         }
         return $this;
     }
 
     public function save(): static
     {
-        if (!$this->{$this->primaryKey}) {
-            DB::$db->insert($this->table)
+        if (!$this->{self::$primaryKey}) {
+            DB::$db->insert(self::$table)
                 ->fields($this->buildFields())
                 ->execute();
-            $this->{$this->primaryKey} = DB::$db->lastId();
+            $this->{self::$primaryKey} = DB::$db->lastId();
         } else {
-            DB::$db->update($this->table)
+            DB::$db->update(self::$table)
                 ->fields($this->buildFields())
-                ->condition($this->primaryKey, $this->{$this->primaryKey})
+                ->condition(self::$primaryKey, $this->{self::$primaryKey})
                 ->execute();
         }
         return $this;
@@ -94,20 +139,20 @@ abstract class Model implements JsonSerializable
     protected function buildFields(): array
     {
         $fields = [];
-        foreach ($this->getFields() as $field) {
+        foreach (static::$fields as $field) {
             $fields[$field] = $this->$field;
         }
         return $fields;
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): array
     {
-        return [$this->primaryKey => $this->{$this->primaryKey}] + $this->buildFields();
+        return [self::$primaryKey => $this->{self::$primaryKey}] + $this->buildFields();
     }
 
     public static function getSelectQuery($alias = 't'): SelectQuery
     {
-        return DB::$db->select((new static())->table, $alias);
+        return DB::$db->select(static::$table, $alias);
     }
 
     /**
