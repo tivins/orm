@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tivins/database.git",
-                "reference": "09b70897fb1cf35f3f442a3fbf29e11a9d532f2f"
+                "reference": "424848a3d9f5923dda7f5331af35c142c17beab7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tivins/database/zipball/09b70897fb1cf35f3f442a3fbf29e11a9d532f2f",
-                "reference": "09b70897fb1cf35f3f442a3fbf29e11a9d532f2f",
+                "url": "https://api.github.com/repos/tivins/database/zipball/424848a3d9f5923dda7f5331af35c142c17beab7",
+                "reference": "424848a3d9f5923dda7f5331af35c142c17beab7",
                 "shasum": ""
             },
             "require": {
@@ -58,7 +58,7 @@
                 "issues": "https://github.com/tivins/database/issues",
                 "source": "https://github.com/tivins/database/tree/main"
             },
-            "time": "2025-09-12T20:26:08+00:00"
+            "time": "2025-09-12T22:01:42+00:00"
         }
     ],
     "packages-dev": [
